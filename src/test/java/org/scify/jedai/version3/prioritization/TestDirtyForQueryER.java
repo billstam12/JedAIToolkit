@@ -43,14 +43,14 @@ import org.scify.jedai.utilities.enumerations.RepresentationModel;
 import org.scify.jedai.utilities.enumerations.SimilarityMetric;
 import org.scify.jedai.utilities.enumerations.WeightingScheme;
 
-public class TestProgressiveDirtyER {
+public class TestDirtyForQueryER {
     public static void main(String[] args) {
         BasicConfigurator.configure();
 
         float[] bestThresholds = {0.75f, 0.45f};
 //        RepresentationModel[] bestModels = {RepresentationModel.CHARACTER_BIGRAM_GRAPHS, RepresentationModel.CHARACTER_BIGRAMS_TF_IDF};
 //        SimilarityMetric[] bestMetrics = {SimilarityMetric.GRAPH_OVERALL_SIMILARITY, SimilarityMetric.GENERALIZED_JACCARD_SIMILARITY};
-        String queryERPath = "/usr/local/share/data/qIds/";
+
         String mainDir = "data/dirtyErDatasets/";
 //        String[] profilesFile = {"cddbProfiles", "coraProfiles"};
         String[] profilesFile = {"papers200k"};
@@ -76,28 +76,36 @@ public class TestProgressiveDirtyER {
             double bpEnd = System.currentTimeMillis();
 
             double bfStart = System.currentTimeMillis();
-            IBlockProcessing blockCleaningMethod2 = new BlockFiltering(0.35f);
+            IBlockProcessing blockCleaningMethod2 = new BlockFiltering();
             blocks = blockCleaningMethod2.refineBlocks(blocks);
             double bfEnd = System.currentTimeMillis();
 
-            double npStart = System.currentTimeMillis();
-            IBlockProcessing comparisonCleaningMethod = new CardinalityNodePruning(WeightingScheme.JS);
+            double epStart = System.currentTimeMillis();
+            IBlockProcessing comparisonCleaningMethod = new CardinalityEdgePruning(WeightingScheme.ARCS);
             List<AbstractBlock> cnpBlocks = comparisonCleaningMethod.refineBlocks(blocks);
-            double npEnd = System.currentTimeMillis();
-
+            double epEnd = System.currentTimeMillis();
 
             float totalComparisons = 0;
+//            for (AbstractBlock block :cnpBlocks) {
+//                totalComparisons += block.getNoOfComparisons();
+//            }
 
-            for (AbstractBlock block : cnpBlocks) {
+
+            for (AbstractBlock block :blocks) {
                 totalComparisons += block.getNoOfComparisons();
             }
 
-            final IPrioritization prioritization = new ProgressiveGlobalTopComparisons((int) totalComparisons, WeightingScheme.JS);
- //           PPS method
-            prioritization.developBlockBasedSchedule(cnpBlocks);
+//            final IPrioritization prioritization = new ProgressiveGlobalTopComparisons((int) totalComparisons, WeightingScheme.JS);
+//            PPS method
+            final IPrioritization prioritization = new ProgressiveEntityScheduling((int) totalComparisons, WeightingScheme.ARCS);
+//            prioritization.developBlockBasedSchedule(cnpBlocks);
+            prioritization.developBlockBasedSchedule(blocks);
+
+
+            double resStart = System.currentTimeMillis();
+
             final IEntityMatching em = new ProfileMatcher(profiles, RepresentationModel.TOKEN_UNIGRAMS, SimilarityMetric.JACCARD_SIMILARITY);//bestModels[i], bestMetrics[i]);
             int counter = 0;
-            double resStart = System.currentTimeMillis();
             while (prioritization.hasNext()) {
                 Comparison c1 = prioritization.next();
                 float similarity = em.executeComparison(c1);
@@ -107,19 +115,17 @@ public class TestProgressiveDirtyER {
                 duplicatePropagation.isSuperfluous(c1.getEntityId1(), c1.getEntityId2());
 //                System.out.println("Recall\t:\t" + (double)duplicatePropagation.getNoOfDuplicates()/duplicatePropagation.getExistingDuplicates());
                 counter++;
-                double recall = (double)duplicatePropagation.getNoOfDuplicates()/duplicatePropagation.getExistingDuplicates();
-                if(counter % 1000000 == 0) {
-                    System.out.println("Total Recall\t:\t" + recall);
-                    double queryRecall = duplicatePropagation.queryDuplicates("/usr/local/share/data/qIds");
-                }
-                if(recall == 1.0) break;
+//                if(counter > 200) break;
+                if (counter == 200 || counter == 5000 || counter == 10000 || counter == 100000)
+                    System.out.println("Recall\t:\t" + (double) duplicatePropagation.getNoOfDuplicates() / duplicatePropagation.getExistingDuplicates());
+
             }
             double resEnd = System.currentTimeMillis();
 
             double end = System.currentTimeMillis();
             System.out.println("BP Time\t:\t" + ((bpEnd - bpStart)/1000));
             System.out.println("BF Time\t:\t" + ((bfEnd - bfStart)/1000));
-            System.out.println("NP Time\t:\t" + ((npEnd - npStart)/1000));
+            System.out.println("NP Time\t:\t" + ((epEnd - epStart)/1000));
             System.out.println("Resolution Time\t:\t" + ((resEnd - resStart)/1000));
             System.out.println("Time\t:\t" + ((end - start)/1000));
             System.out.println("Recall\t:\t" + (double)duplicatePropagation.getNoOfDuplicates()/duplicatePropagation.getExistingDuplicates());

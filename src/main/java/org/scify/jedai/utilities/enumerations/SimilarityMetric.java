@@ -77,7 +77,7 @@ public enum SimilarityMetric {
 //                try euclidean distance, too!
 //                break;
             default:
-                return null;
+                return simMetrics;
         }
         return simMetrics;
     }

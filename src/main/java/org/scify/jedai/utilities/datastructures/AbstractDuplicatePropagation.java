@@ -15,10 +15,14 @@
  */
 package org.scify.jedai.utilities.datastructures;
 
+import java.util.HashSet;
 import java.util.List;
 import org.scify.jedai.datamodel.IdDuplicates;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.scify.jedai.datamodel.EquivalenceCluster;
+import org.scify.jedai.datareader.AbstractReader;
 
 /**
  *
@@ -53,4 +57,7 @@ public abstract class AbstractDuplicatePropagation {
     public Set<IdDuplicates> getDuplicates() {
         return duplicates;
     }
+
+
+    public abstract double queryDuplicates(String s);
 }

@@ -15,12 +15,20 @@
  */
 package org.scify.jedai.utilities.datastructures;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import org.apache.commons.lang3.SerializationUtils;
 import org.scify.jedai.datamodel.IdDuplicates;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.scify.jedai.datamodel.EquivalenceCluster;
+import org.scify.jedai.datareader.AbstractReader;
+import org.scify.jedai.datareader.IDataReader;
+import org.scify.jedai.datareader.entityreader.EntitySerializationReader;
 import org.scify.jedai.utilities.graph.ConnectedComponents;
 import org.scify.jedai.utilities.graph.UndirectedGraph;
 
@@ -109,7 +117,6 @@ public class UnilateralDuplicatePropagation extends AbstractDuplicatePropagation
     }
 
     @Override
-
     public boolean isSuperfluous(int entityId1, int entityId2) {
         final IdDuplicates duplicatePair1 = new IdDuplicates(entityId1, entityId2);
         final IdDuplicates duplicatePair2 = new IdDuplicates(entityId2, entityId1);
@@ -118,7 +125,6 @@ public class UnilateralDuplicatePropagation extends AbstractDuplicatePropagation
                 || detectedDuplicates.contains(duplicatePair2)) {
             return true;
         }
-        
         if (duplicates.contains(duplicatePair1)
                 || duplicates.contains(duplicatePair2)) {
             if (entityId1 < entityId2) {
@@ -131,8 +137,40 @@ public class UnilateralDuplicatePropagation extends AbstractDuplicatePropagation
         return false;
     }
 
+
     @Override
     public void resetDuplicates() {
         detectedDuplicates.clear();
+    }
+
+    @Override
+    public double queryDuplicates(String qIdsPath) {
+        File folder = new File(qIdsPath);
+        File[] listOfFiles = folder.listFiles();
+        for (File file : listOfFiles){
+            String qIdPath = file.getAbsolutePath();
+            Set<Integer> qIds = (Set<Integer>) AbstractReader.loadSerializedObject(qIdPath);
+            Set<IdDuplicates> queryDetectedDuplicates = new HashSet<>();
+            if (qIds != null) {
+                final Set<IdDuplicates> queryExistingDuplicates = getDuplicates().stream().filter(idDuplicates -> {
+                    int id1 = idDuplicates.getEntityId1();
+                    int id2 = idDuplicates.getEntityId2();
+                    return (qIds.contains(id1) || qIds.contains(id2));
+                }).collect(Collectors.toSet());
+
+                queryDetectedDuplicates = detectedDuplicates.stream().filter(idDuplicates -> {
+                    int id1 = idDuplicates.getEntityId1();
+                    int id2 = idDuplicates.getEntityId2();
+                    // check on query's existing duplicates
+                    final IdDuplicates duplicatePair1 = new IdDuplicates(id1, id2);
+                    final IdDuplicates duplicatePair2 = new IdDuplicates(id2, id1);
+                    return (queryExistingDuplicates.contains(duplicatePair1)
+                            || queryExistingDuplicates.contains(duplicatePair2));
+                }).collect(Collectors.toSet());
+                double queryRecall = queryDetectedDuplicates.size() / queryExistingDuplicates.size();
+                System.out.println("Query Recall\t:\t" + queryRecall);
+            }
+        }
+        return 0.0;
     }
 }

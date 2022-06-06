@@ -22,10 +22,7 @@ import gnu.trove.set.hash.TIntHashSet;
 import org.apache.commons.math3.stat.inference.ChiSquareTest;
 import org.apache.jena.atlas.json.JsonArray;
 import org.apache.jena.atlas.json.JsonObject;
-import org.scify.jedai.datamodel.AbstractBlock;
-import org.scify.jedai.datamodel.BilateralBlock;
-import org.scify.jedai.datamodel.Comparison;
-import org.scify.jedai.datamodel.UnilateralBlock;
+import org.scify.jedai.datamodel.*;
 import org.scify.jedai.utilities.IConstants;
 import org.scify.jedai.utilities.enumerations.WeightingScheme;
 

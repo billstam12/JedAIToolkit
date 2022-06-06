@@ -100,4 +100,9 @@ public class BilateralDuplicatePropagation extends AbstractDuplicatePropagation 
         entities1.clear();
         entities2.clear();
     }
+
+    @Override
+    public double queryDuplicates(String qIdPath) {
+        return 0.0;
+    }
 }

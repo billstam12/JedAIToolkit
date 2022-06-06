@@ -58,6 +58,11 @@ public class ProgressiveGlobalTopComparisons extends AbstractHashBasedPrioritiza
         } else {
             final ProgressiveCEP pcep = new ProgressiveCEP(comparisonsBudget, wScheme);
             pcep.refineBlocks(blocks);
+            float totalComparisons = 0;
+
+            for (AbstractBlock block :blocks) {
+                totalComparisons += block.getNoOfComparisons();
+            }
             compIterator = pcep.getTopComparisons().iterator();
         }
     }
