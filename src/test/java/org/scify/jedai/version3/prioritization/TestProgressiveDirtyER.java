@@ -144,8 +144,9 @@ public class TestProgressiveDirtyER {
                     ArrayList<String> lineList = new ArrayList<>();
                     lineList.add(currentTime.toString());
                     lineList.add(recall.toString());
-                    ArrayList<String> queriesRecall = duplicatePropagation.queryDuplicates(queryERPath);
-                    lineList.addAll(queriesRecall);
+
+                    //ArrayList<String> queriesRecall = duplicatePropagation.queryDuplicates(queryERPath);
+                    //lineList.addAll(queriesRecall);
                     String[] line = new String[lineList.size()];
                     lineList.toArray(line);
                     timeThreshold = currentTime + timeThreshold;
