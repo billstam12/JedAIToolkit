@@ -67,7 +67,7 @@ public class TestProgressiveDirtyER {
         File outDir = new File("../queryER/queryER-experiments/oag/jedai/" + profilesFile[0] + "/");
 
         if(!(outDir.exists()))  outDir.mkdir();
-        File queriesFile = new File(outDir.getAbsolutePath() + queries);
+        File queriesFile = new File(outDir.getAbsolutePath() + "/" + queries);
 
         FileWriter outputfile = new FileWriter(queriesFile);
         CSVWriter writer = new CSVWriter(outputfile);
@@ -114,13 +114,13 @@ public class TestProgressiveDirtyER {
 
             float totalComparisons = 0;
 
-            for (AbstractBlock block : cnpBlocks) {
+            for (AbstractBlock block : blocks) {
                 totalComparisons += block.getNoOfComparisons();
             }
 
             final IPrioritization prioritization = new ProgressiveGlobalTopComparisons((int) totalComparisons, WeightingScheme.JS);
  //           PPS method
-            prioritization.developBlockBasedSchedule(cnpBlocks);
+            prioritization.developBlockBasedSchedule(blocks);
             final IEntityMatching em = new ProfileMatcher(profiles, RepresentationModel.TOKEN_UNIGRAMS, SimilarityMetric.JACCARD_SIMILARITY);//bestModels[i], bestMetrics[i]);
             int counter = 0;
             double resStart = System.currentTimeMillis();

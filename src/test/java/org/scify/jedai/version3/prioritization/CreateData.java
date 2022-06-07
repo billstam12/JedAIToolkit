@@ -35,9 +35,8 @@ public class CreateData {
 
     public static void main(String[] args) throws IOException {
         String path = "";
-        String file = "papers500k";
-        Integer type = 1;
-        if(type == 0) {
+        String file = "papers5m";
+
             path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/oag/" + file + ".csv";
 
             List<EntityProfile> entityProfiles = new ArrayList<>();
@@ -60,8 +59,7 @@ public class CreateData {
 
             entitySerializationReader.storeSerializedObject(entityProfiles,
                     "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/" + file);
-        }
-        else{
+
             path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/ground_truth_oag/ground_truth_" + file + ".csv";
             try (BufferedReader br = new BufferedReader(new FileReader(path))) {
                 String line;
@@ -75,11 +73,10 @@ public class CreateData {
                     IdDuplicates idd = new IdDuplicates(id_d, id_s);
                     groundDups.add(idd);
                 }
-                EntitySerializationReader entitySerializationReader = new EntitySerializationReader( "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/groundTruth" + file + "Duplicates");
+                entitySerializationReader = new EntitySerializationReader( "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/groundTruth" + file + "Duplicates");
 
                 entitySerializationReader.storeSerializedObject(groundDups,
                         "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/groundTruth" + file + "Duplicates");
             }
-        }
     }
 }
