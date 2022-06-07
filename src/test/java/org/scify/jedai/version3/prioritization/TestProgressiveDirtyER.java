@@ -59,7 +59,7 @@ public class TestProgressiveDirtyER {
         String no = "500k";
         String queries = "queries1";
 
-        
+
         String mainDir = "data/queryErDatasets/";
         String[] profilesFile = {"papers" + no};
         String[] groundtruthFile = {profilesFile[0] + "Duplicates"};
