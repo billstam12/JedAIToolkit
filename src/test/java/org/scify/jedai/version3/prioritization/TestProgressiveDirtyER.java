@@ -108,19 +108,19 @@ public class TestProgressiveDirtyER {
 
             double npStart = System.currentTimeMillis();
             IBlockProcessing comparisonCleaningMethod = new CardinalityNodePruning(WeightingScheme.JS);
-            //List<AbstractBlock> cnpBlocks = comparisonCleaningMethod.refineBlocks(blocks);
+            List<AbstractBlock> cnpBlocks = comparisonCleaningMethod.refineBlocks(blocks);
             double npEnd = System.currentTimeMillis();
 
 
             float totalComparisons = 0;
 
-            for (AbstractBlock block : blocks) {
+            for (AbstractBlock block : cnpBlocks) {
                 totalComparisons += block.getNoOfComparisons();
             }
 
             final IPrioritization prioritization = new ProgressiveGlobalTopComparisons((int) totalComparisons, WeightingScheme.JS);
  //           PPS method
-            prioritization.developBlockBasedSchedule(blocks);
+            prioritization.developBlockBasedSchedule(cnpBlocks);
             final IEntityMatching em = new ProfileMatcher(profiles, RepresentationModel.TOKEN_UNIGRAMS, SimilarityMetric.JACCARD_SIMILARITY);//bestModels[i], bestMetrics[i]);
             int counter = 0;
             double resStart = System.currentTimeMillis();
@@ -140,8 +140,6 @@ public class TestProgressiveDirtyER {
 //                }
                 Double currentTime = (System.currentTimeMillis() - resStart) /1000;
                 if(currentTime > t) {
-                    System.out.println(currentTime);
-                    System.out.println(timeThreshold);
                     System.out.println("Total Recall\t:\t" + recall);
                     ArrayList<String> lineList = new ArrayList<>();
                     lineList.add(currentTime.toString());
