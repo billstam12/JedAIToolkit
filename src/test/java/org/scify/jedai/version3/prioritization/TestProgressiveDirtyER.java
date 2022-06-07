@@ -57,7 +57,7 @@ public class TestProgressiveDirtyER {
         BasicConfigurator.configure();
 
         String no = "1m";
-        String queries = "queries1";
+        String queries = "queries500k";
 
 
         String mainDir = "data/queryERDatasets/";
