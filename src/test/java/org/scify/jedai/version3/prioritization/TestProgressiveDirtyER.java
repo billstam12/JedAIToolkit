@@ -140,11 +140,11 @@ public class TestProgressiveDirtyER {
                 Double currentTime = (System.currentTimeMillis() - resStart) /1000;
                 if(currentTime > timeThreshold) {
                     System.out.println(currentTime);
+                    System.out.println(timeThreshold);
                     System.out.println("Total Recall\t:\t" + recall);
                     ArrayList<String> lineList = new ArrayList<>();
                     lineList.add(currentTime.toString());
                     lineList.add(recall.toString());
-
                     //ArrayList<String> queriesRecall = duplicatePropagation.queryDuplicates(queryERPath);
                     //lineList.addAll(queriesRecall);
                     String[] line = new String[lineList.size()];
