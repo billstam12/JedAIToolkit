@@ -125,6 +125,7 @@ public class TestProgressiveDirtyER {
             int counter = 0;
             double resStart = System.currentTimeMillis();
             double timeThreshold = 5;
+            double t = timeThreshold;
             while (prioritization.hasNext()) {
                 Comparison c1 = prioritization.next();
                 float similarity = em.executeComparison(c1);
@@ -138,7 +139,7 @@ public class TestProgressiveDirtyER {
 //                    double[] queriesRecall = duplicatePropagation.queryDuplicates(queryERPath);
 //                }
                 Double currentTime = (System.currentTimeMillis() - resStart) /1000;
-                if(currentTime > timeThreshold) {
+                if(currentTime > t) {
                     System.out.println(currentTime);
                     System.out.println(timeThreshold);
                     System.out.println("Total Recall\t:\t" + recall);
@@ -149,7 +150,7 @@ public class TestProgressiveDirtyER {
                     //lineList.addAll(queriesRecall);
                     String[] line = new String[lineList.size()];
                     lineList.toArray(line);
-                    timeThreshold = currentTime + timeThreshold;
+                    t += timeThreshold;
                     writer.writeNext(line);
                 }
                 if(recall == 1.0) break;
