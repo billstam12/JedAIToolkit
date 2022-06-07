@@ -18,7 +18,6 @@ package org.scify.jedai.utilities.datastructures;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.scify.jedai.datamodel.IdDuplicates;
 import java.util.HashSet;
 import java.util.List;
@@ -27,8 +26,6 @@ import java.util.stream.Collectors;
 
 import org.scify.jedai.datamodel.EquivalenceCluster;
 import org.scify.jedai.datareader.AbstractReader;
-import org.scify.jedai.datareader.IDataReader;
-import org.scify.jedai.datareader.entityreader.EntitySerializationReader;
 import org.scify.jedai.utilities.graph.ConnectedComponents;
 import org.scify.jedai.utilities.graph.UndirectedGraph;
 
@@ -144,9 +141,12 @@ public class UnilateralDuplicatePropagation extends AbstractDuplicatePropagation
     }
 
     @Override
-    public double queryDuplicates(String qIdsPath) {
+    public ArrayList<String> queryDuplicates(String qIdsPath) {
         File folder = new File(qIdsPath);
         File[] listOfFiles = folder.listFiles();
+        assert listOfFiles != null;
+        ArrayList<String> queries = new ArrayList<>();
+        int i = 0;
         for (File file : listOfFiles){
             String qIdPath = file.getAbsolutePath();
             Set<Integer> qIds = (Set<Integer>) AbstractReader.loadSerializedObject(qIdPath);
@@ -167,10 +167,12 @@ public class UnilateralDuplicatePropagation extends AbstractDuplicatePropagation
                     return (queryExistingDuplicates.contains(duplicatePair1)
                             || queryExistingDuplicates.contains(duplicatePair2));
                 }).collect(Collectors.toSet());
-                double queryRecall = queryDetectedDuplicates.size() / queryExistingDuplicates.size();
-                System.out.println("Query Recall\t:\t" + queryRecall);
+                Double queryRecall = queryDetectedDuplicates.size() / (double) queryExistingDuplicates.size();
+                //System.out.println("Query Recall\t:\t" + queryRecall);
+                queries.add(queryRecall.toString());
             }
+            i++;
         }
-        return 0.0;
+        return queries;
     }
 }

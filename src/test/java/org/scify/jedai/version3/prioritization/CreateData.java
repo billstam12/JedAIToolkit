@@ -15,10 +15,11 @@ public class CreateData {
     private static final String TAB_DELIMETER = "\t";
 
     public static void main(String[] args) throws IOException {
-        Integer type = 1;
         String path = "";
+        String file = "papers5m";
+        Integer type = 1;
         if(type == 0) {
-            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/oag/papers1m.csv";
+            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/oag/" + file + ".csv";
 
             List<List<String>> records = new ArrayList<>();
             List<EntityProfile> entityProfiles = new ArrayList<>();
@@ -43,13 +44,13 @@ public class CreateData {
                     entityProfiles.add(eP);
                 }
             }
-            EntitySerializationReader entitySerializationReader = new EntitySerializationReader( "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/progressive-data/papers1m");
+            EntitySerializationReader entitySerializationReader = new EntitySerializationReader( "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/" + file);
 
             entitySerializationReader.storeSerializedObject(entityProfiles,
-                    "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/progressive-data/papers1m");
+                    "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/" + file);
         }
         else{
-            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive/ground_truth_papers1m.csv";
+            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/ground_truth_oag/ground_truth_" + file + ".csv";
             try (BufferedReader br = new BufferedReader(new FileReader(path))) {
                 String line;
                 Set<IdDuplicates> groundDups = new HashSet<>();
@@ -62,10 +63,10 @@ public class CreateData {
                     IdDuplicates idd = new IdDuplicates(id_d, id_s);
                     groundDups.add(idd);
                 }
-                EntitySerializationReader entitySerializationReader = new EntitySerializationReader( "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/progressive-data/groundTruth/papers1mDuplicates");
+                EntitySerializationReader entitySerializationReader = new EntitySerializationReader( "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/groundTruth" + file + "Duplicates");
 
                 entitySerializationReader.storeSerializedObject(groundDups,
-                        "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/progressive-data/groundTruth/papers1mDuplicates");
+                        "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/groundTruth" + file + "Duplicates");
             }
         }
     }

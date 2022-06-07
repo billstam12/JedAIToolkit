@@ -102,7 +102,7 @@ public class BilateralDuplicatePropagation extends AbstractDuplicatePropagation 
     }
 
     @Override
-    public double queryDuplicates(String qIdPath) {
+    public ArrayList<String> queryDuplicates(String qIdPath) {
         return 0.0;
     }
 }

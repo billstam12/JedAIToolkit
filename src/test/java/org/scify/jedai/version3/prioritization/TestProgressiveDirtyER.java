@@ -15,8 +15,17 @@
  */
 package org.scify.jedai.version3.prioritization;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.opencsv.CSVWriter;
 import org.apache.log4j.BasicConfigurator;
+import org.checkerframework.checker.units.qual.A;
 import org.scify.jedai.blockbuilding.IBlockBuilding;
 import org.scify.jedai.blockbuilding.StandardBlocking;
 import org.scify.jedai.blockprocessing.IBlockProcessing;
@@ -44,18 +53,32 @@ import org.scify.jedai.utilities.enumerations.SimilarityMetric;
 import org.scify.jedai.utilities.enumerations.WeightingScheme;
 
 public class TestProgressiveDirtyER {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
 
-        float[] bestThresholds = {0.75f, 0.45f};
-//        RepresentationModel[] bestModels = {RepresentationModel.CHARACTER_BIGRAM_GRAPHS, RepresentationModel.CHARACTER_BIGRAMS_TF_IDF};
-//        SimilarityMetric[] bestMetrics = {SimilarityMetric.GRAPH_OVERALL_SIMILARITY, SimilarityMetric.GENERALIZED_JACCARD_SIMILARITY};
         String queryERPath = "/usr/local/share/data/qIds/";
         String mainDir = "data/dirtyErDatasets/";
-//        String[] profilesFile = {"cddbProfiles", "coraProfiles"};
         String[] profilesFile = {"papers200k"};
-//        String[] groundtruthFile = {"cddbIdDuplicates", "coraIdDuplicates"};
         String[] groundtruthFile = {"papers200kDuplicates"};
+        String queries = "queries1";
+        File outDir = new File("../queryER/queryER-experiments/oag/jedai/" + profilesFile[0] + "/");
+
+        if(!(outDir.exists()))  outDir.mkdir();
+        File queriesFile = new File(outDir.getAbsolutePath() + queries);
+
+        FileWriter outputfile = new FileWriter(queriesFile);
+        CSVWriter writer = new CSVWriter(outputfile);
+        File folder = new File(queryERPath);
+        File[] listOfFiles = folder.listFiles();
+        List<String> headerList = new ArrayList<>();
+        headerList.add("Current Time");
+        headerList.add("Total Recall");
+        assert listOfFiles != null;
+        headerList = Arrays.stream(listOfFiles).map(File::getName).collect(Collectors.toList());
+        String[] header = new String[headerList.size()];
+
+        headerList.toArray(header);
+        writer.writeNext(header);
 
         for (int i = 0; i < groundtruthFile.length; i++) {
             IEntityReader eReader = new EntitySerializationReader(mainDir + profilesFile[i]);
@@ -76,7 +99,7 @@ public class TestProgressiveDirtyER {
             double bpEnd = System.currentTimeMillis();
 
             double bfStart = System.currentTimeMillis();
-            IBlockProcessing blockCleaningMethod2 = new BlockFiltering(0.35f);
+            IBlockProcessing blockCleaningMethod2 = new BlockFiltering(0.5f);
             blocks = blockCleaningMethod2.refineBlocks(blocks);
             double bfEnd = System.currentTimeMillis();
 
@@ -98,19 +121,32 @@ public class TestProgressiveDirtyER {
             final IEntityMatching em = new ProfileMatcher(profiles, RepresentationModel.TOKEN_UNIGRAMS, SimilarityMetric.JACCARD_SIMILARITY);//bestModels[i], bestMetrics[i]);
             int counter = 0;
             double resStart = System.currentTimeMillis();
+            boolean flag = false;
             while (prioritization.hasNext()) {
                 Comparison c1 = prioritization.next();
                 float similarity = em.executeComparison(c1);
-//                System.err.println(similarity);
                 c1.setUtilityMeasure(similarity);
 
                 duplicatePropagation.isSuperfluous(c1.getEntityId1(), c1.getEntityId2());
-//                System.out.println("Recall\t:\t" + (double)duplicatePropagation.getNoOfDuplicates()/duplicatePropagation.getExistingDuplicates());
                 counter++;
-                double recall = (double)duplicatePropagation.getNoOfDuplicates()/duplicatePropagation.getExistingDuplicates();
-                if(counter % 1000000 == 0) {
+                Double recall = (double)duplicatePropagation.getNoOfDuplicates()/duplicatePropagation.getExistingDuplicates();
+//                if(counter % 1000000 == 0) {
+//                    System.out.println("Total Recall\t:\t" + recall);
+//                    double[] queriesRecall = duplicatePropagation.queryDuplicates(queryERPath);
+//                }
+                Double currentTime = (System.currentTimeMillis() - resStart) /1000;
+                if(currentTime > 6.0 && !flag) {
+                    System.out.println(currentTime);
                     System.out.println("Total Recall\t:\t" + recall);
-                    double queryRecall = duplicatePropagation.queryDuplicates("/usr/local/share/data/qIds");
+                    ArrayList<String> lineList = new ArrayList<>();
+                    lineList.add(currentTime.toString());
+                    lineList.add(recall.toString());
+                    ArrayList<String> queriesRecall = duplicatePropagation.queryDuplicates(queryERPath);
+                    lineList.addAll(queriesRecall);
+                    String[] line = new String[lineList.size()];
+                    lineList.toArray(line);
+                    flag = true;
+                    writer.writeNext(line);
                 }
                 if(recall == 1.0) break;
             }
@@ -129,6 +165,7 @@ public class TestProgressiveDirtyER {
 //            }
 //            System.err.println(tcomps);
             System.err.println("Comps: "+counter);
+            writer.close();
         }
     }
 }
