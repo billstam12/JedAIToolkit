@@ -56,8 +56,8 @@ public class TestProgressiveDirtyER {
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
 
-        String no = "1m";
-        String queries = "queries500k";
+        String no = "500k";
+        String queries = "queries1";
 
 
         String mainDir = "data/queryERDatasets/";
