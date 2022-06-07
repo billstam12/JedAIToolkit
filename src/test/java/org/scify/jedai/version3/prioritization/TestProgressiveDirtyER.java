@@ -63,7 +63,7 @@ public class TestProgressiveDirtyER {
         String mainDir = "data/queryERDatasets/";
         String[] profilesFile = {"papers" + no};
         String[] groundtruthFile = {profilesFile[0] + "Duplicates"};
-        String queryERPath = "../queryER/queryER-experiments/oag/links/" + no + "/" + queries;
+        String queryERPath = "../queryER/queryER-experiments/oag/no-link/" + no + "/qIds/" + queries ;
         File outDir = new File("../queryER/queryER-experiments/oag/jedai/" + profilesFile[0] + "/");
 
         if(!(outDir.exists()))  outDir.mkdir();
