@@ -35,15 +35,15 @@ public class CreateData {
 
     public static void main(String[] args) throws IOException {
         String path = "";
-        String file = "papers5m";
+        String file = "papers3m";
 
             path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/oag/" + file + ".csv";
 
             List<EntityProfile> entityProfiles = new ArrayList<>();
             CsvParser parser = openCsv(path);
             String[] header = parser.parseNext();
-            String[] nextLine;
-            while ((nextLine = parser.parseNext()) != null){
+            String[] nextLine = parser.parseNext();
+            while (nextLine != null){
                 int key = 0;
                 int index = 0;
                 EntityProfile eP = new EntityProfile(Integer.toString(Integer.parseInt(nextLine[key])));
@@ -54,6 +54,12 @@ public class CreateData {
                     index++;
                 }
                 entityProfiles.add(eP);
+                try{
+                    nextLine = parser.parseNext();
+                }
+                catch (Exception e){
+                    nextLine = parser.parseNext();
+                }
             }
             EntitySerializationReader entitySerializationReader = new EntitySerializationReader( "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/" + file);
 
