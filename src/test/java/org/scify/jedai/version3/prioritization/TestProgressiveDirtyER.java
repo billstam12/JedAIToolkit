@@ -67,7 +67,7 @@ public class TestProgressiveDirtyER {
         File outDir = new File("../queryER/queryER-experiments/oag/jedai/" + profilesFile[0] + "/");
 
         if(!(outDir.exists()))  outDir.mkdir();
-        File queriesFile = new File(outDir.getAbsolutePath() + "/" + queries);
+        File queriesFile = new File(outDir.getAbsolutePath() + "/" + queries + ".csv");
 
         FileWriter outputfile = new FileWriter(queriesFile);
         CSVWriter writer = new CSVWriter(outputfile);
@@ -138,7 +138,7 @@ public class TestProgressiveDirtyER {
 //                    double[] queriesRecall = duplicatePropagation.queryDuplicates(queryERPath);
 //                }
                 Double currentTime = (System.currentTimeMillis() - resStart) /1000;
-                if(currentTime > 6.0 && !flag) {
+                if(currentTime > 15.0 && !flag) {
                     System.out.println(currentTime);
                     System.out.println("Total Recall\t:\t" + recall);
                     ArrayList<String> lineList = new ArrayList<>();
