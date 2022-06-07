@@ -56,8 +56,8 @@ public class TestProgressiveDirtyER {
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
 
-        String no = "500k";
-        String queries = "queries1";
+        String no = "1m";
+        String queries = "queries2";
 
 
         String mainDir = "data/queryERDatasets/";
@@ -108,7 +108,7 @@ public class TestProgressiveDirtyER {
 
             double npStart = System.currentTimeMillis();
             IBlockProcessing comparisonCleaningMethod = new CardinalityNodePruning(WeightingScheme.JS);
-            List<AbstractBlock> cnpBlocks = comparisonCleaningMethod.refineBlocks(blocks);
+            //List<AbstractBlock> cnpBlocks = comparisonCleaningMethod.refineBlocks(blocks);
             double npEnd = System.currentTimeMillis();
 
 
@@ -124,7 +124,7 @@ public class TestProgressiveDirtyER {
             final IEntityMatching em = new ProfileMatcher(profiles, RepresentationModel.TOKEN_UNIGRAMS, SimilarityMetric.JACCARD_SIMILARITY);//bestModels[i], bestMetrics[i]);
             int counter = 0;
             double resStart = System.currentTimeMillis();
-            boolean flag = false;
+            double timeThreshold = 5;
             while (prioritization.hasNext()) {
                 Comparison c1 = prioritization.next();
                 float similarity = em.executeComparison(c1);
@@ -138,7 +138,7 @@ public class TestProgressiveDirtyER {
 //                    double[] queriesRecall = duplicatePropagation.queryDuplicates(queryERPath);
 //                }
                 Double currentTime = (System.currentTimeMillis() - resStart) /1000;
-                if(currentTime > 15.0 && !flag) {
+                if(currentTime > timeThreshold) {
                     System.out.println(currentTime);
                     System.out.println("Total Recall\t:\t" + recall);
                     ArrayList<String> lineList = new ArrayList<>();
@@ -148,7 +148,7 @@ public class TestProgressiveDirtyER {
                     lineList.addAll(queriesRecall);
                     String[] line = new String[lineList.size()];
                     lineList.toArray(line);
-                    flag = true;
+                    timeThreshold *= 2;
                     writer.writeNext(line);
                 }
                 if(recall == 1.0) break;
