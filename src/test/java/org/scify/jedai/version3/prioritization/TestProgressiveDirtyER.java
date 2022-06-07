@@ -60,7 +60,7 @@ public class TestProgressiveDirtyER {
         String queries = "queries1";
 
 
-        String mainDir = "data/queryErDatasets/";
+        String mainDir = "data/queryERDatasets/";
         String[] profilesFile = {"papers" + no};
         String[] groundtruthFile = {profilesFile[0] + "Duplicates"};
         String queryERPath = "../queryER/queryER-experiments/oag/links/" + no + "/" + queries;
