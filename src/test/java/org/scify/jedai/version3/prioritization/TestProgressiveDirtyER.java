@@ -148,7 +148,7 @@ public class TestProgressiveDirtyER {
                     lineList.addAll(queriesRecall);
                     String[] line = new String[lineList.size()];
                     lineList.toArray(line);
-                    timeThreshold *= 2;
+                    timeThreshold = currentTime + timeThreshold;
                     writer.writeNext(line);
                 }
                 if(recall == 1.0) break;
