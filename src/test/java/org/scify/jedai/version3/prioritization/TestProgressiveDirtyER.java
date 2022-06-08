@@ -63,7 +63,7 @@ public class TestProgressiveDirtyER {
         String mainDir = "data/queryERDatasets/";
         String[] profilesFile = {"papers" + no};
         String[] groundtruthFile = {profilesFile[0] + "Duplicates"};
-        String queryERPath = "../queryER/queryER-experiments/oag/no-link/" + no + "/qIds/" + queries ;
+        String queryERPath = "../queryER/queryER-experiments/oag/no-link/" + no + "/" + queries + "/qIds/" ;
         File outDir = new File("../queryER/queryER-experiments/oag/jedai/" + profilesFile[0] + "/");
 
         if(!(outDir.exists()))  outDir.mkdir();
@@ -77,7 +77,7 @@ public class TestProgressiveDirtyER {
         headerList.add("Current Time");
         headerList.add("Total Recall");
         assert listOfFiles != null;
-        headerList = Arrays.stream(listOfFiles).map(File::getName).collect(Collectors.toList());
+        headerList.addAll(Arrays.stream(listOfFiles).map(File::getName).collect(Collectors.toList()));
         String[] header = new String[headerList.size()];
 
         headerList.toArray(header);

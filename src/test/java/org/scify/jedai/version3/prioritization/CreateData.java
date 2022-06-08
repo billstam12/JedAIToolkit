@@ -35,7 +35,7 @@ public class CreateData {
 
     public static void main(String[] args) throws IOException {
         String path = "";
-        String file = "papers3m";
+        String file = "papers1m";
 
             path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/oag/" + file + ".csv";
 
@@ -54,12 +54,7 @@ public class CreateData {
                     index++;
                 }
                 entityProfiles.add(eP);
-                try{
-                    nextLine = parser.parseNext();
-                }
-                catch (Exception e){
-                    nextLine = parser.parseNext();
-                }
+                nextLine = parser.parseNext();
             }
             EntitySerializationReader entitySerializationReader = new EntitySerializationReader( "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/" + file);
 
