@@ -35,7 +35,7 @@ public class CreateData {
 
     public static void main(String[] args) throws IOException {
         String path = "";
-        String file = "papers1m";
+        String file = "papers1m500k";
 
             path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/oag/" + file + ".csv";
 
