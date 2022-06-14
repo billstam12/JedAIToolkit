@@ -56,13 +56,13 @@ public class TestProgressiveDirtyER {
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
 
-        String no = "2m";
+        String no = "500k";
         String queries = "queries2";
 
 
         String mainDir = "data/queryERDatasets/";
         //String[] profilesFile = {"papers" + no};
-        String[] profilesFile = {"projects"};
+        String[] profilesFile = {"people500k"};
         String[] groundtruthFile = {profilesFile[0] + "Duplicates"};
         String queryERPath = "../queryER/queryER-experiments/oag/no-link/" + no + "/" + queries + "/qIds/" ;
         File outDir = new File("../queryER/queryER-experiments/oag/jedai/" + profilesFile[0] + "/");
