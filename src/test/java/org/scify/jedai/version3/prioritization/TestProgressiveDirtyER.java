@@ -97,6 +97,7 @@ public class TestProgressiveDirtyER {
             double start = System.currentTimeMillis();
             IGroundTruthReader gtReader = new GtSerializationReader(mainDir + groundtruthFile[i]);
             final AbstractDuplicatePropagation duplicatePropagation = new UnilateralDuplicatePropagation(gtReader.getDuplicatePairs(null));
+            System.out.println(duplicatePropagation.getDuplicates().iterator().next().getEntityId1());
             System.out.println("Existing Duplicates\t:\t" + duplicatePropagation.getDuplicates().size());
 
             IBlockBuilding blockBuildingMethod = new StandardBlocking();
