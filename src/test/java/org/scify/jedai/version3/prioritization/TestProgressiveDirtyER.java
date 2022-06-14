@@ -61,7 +61,7 @@ public class TestProgressiveDirtyER {
 
 
         String mainDir = "data/queryERDatasets/";
-        // String[] profilesFile = {"papers" + no};
+        //String[] profilesFile = {"papers" + no};
         String[] profilesFile = {"projects"};
         String[] groundtruthFile = {profilesFile[0] + "Duplicates"};
         String queryERPath = "../queryER/queryER-experiments/oag/no-link/" + no + "/" + queries + "/qIds/" ;
@@ -72,13 +72,19 @@ public class TestProgressiveDirtyER {
 
         FileWriter outputfile = new FileWriter(queriesFile);
         CSVWriter writer = new CSVWriter(outputfile);
-        //File folder = new File(queryERPath);
-        File[] listOfFiles = folder.listFiles();
         List<String> headerList = new ArrayList<>();
-        headerList.add("Current Time");
-        headerList.add("Total Recall");
-        assert listOfFiles != null;
-        headerList.addAll(Arrays.stream(listOfFiles).map(File::getName).collect(Collectors.toList()));
+        try {
+            File folder = new File(queryERPath);
+            File[] listOfFiles = folder.listFiles();
+            headerList.add("Current Time");
+            headerList.add("Total Recall");
+            assert listOfFiles != null;
+            headerList.addAll(Arrays.stream(listOfFiles).map(File::getName).collect(Collectors.toList()));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
         String[] header = new String[headerList.size()];
 
         headerList.toArray(header);
