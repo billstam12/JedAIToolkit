@@ -61,8 +61,8 @@ public class TestProgressiveDirtyER {
 
 
         String mainDir = "data/queryERDatasets/";
-        String[] profilesFile = {"papers" + no};
-       // String[] profilesFile = {"people500k"};
+//        String[] profilesFile = {"papers" + no};
+        String[] profilesFile = {"projects"};
         String[] groundtruthFile = {profilesFile[0] + "Duplicates"};
         String queryERPath = "../queryER/queryER-experiments/oag/no-link/" + no + "/" + queries + "/qIds/" ;
         File outDir = new File("../queryER/queryER-experiments/oag/jedai/" + profilesFile[0] + "/");
@@ -97,7 +97,6 @@ public class TestProgressiveDirtyER {
             double start = System.currentTimeMillis();
             IGroundTruthReader gtReader = new GtSerializationReader(mainDir + groundtruthFile[i]);
             final AbstractDuplicatePropagation duplicatePropagation = new UnilateralDuplicatePropagation(gtReader.getDuplicatePairs(null));
-            System.out.println(duplicatePropagation.getDuplicates().iterator().next().getEntityId1());
             System.out.println("Existing Duplicates\t:\t" + duplicatePropagation.getDuplicates().size());
 
             IBlockBuilding blockBuildingMethod = new StandardBlocking();
