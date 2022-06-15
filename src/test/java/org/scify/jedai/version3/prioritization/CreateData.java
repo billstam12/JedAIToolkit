@@ -35,10 +35,10 @@ public class CreateData {
 
     public static void main(String[] args) throws IOException {
         String path = "";
-        String file = "projects";
+        String file = "papers5m";
 
-//            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/oag/" + file + ".csv";
-            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/synthetic/" + file + ".csv";
+            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/oag/" + file + ".csv";
+//            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/synthetic/" + file + ".csv";
 
             List<EntityProfile> entityProfiles = new ArrayList<>();
             CsvParser parser = openCsv(path);
@@ -62,7 +62,7 @@ public class CreateData {
             entitySerializationReader.storeSerializedObject(entityProfiles,
                     "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/" + file);
 
-            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/ground_truth_synthetic/ground_truth_" + file + ".csv";
+            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/ground_truth_oag/ground_truth_" + file + ".csv";
             try (BufferedReader br = new BufferedReader(new FileReader(path))) {
                 String line;
                 Set<IdDuplicates> groundDups = new HashSet<>();
