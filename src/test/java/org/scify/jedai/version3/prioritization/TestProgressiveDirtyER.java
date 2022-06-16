@@ -56,7 +56,7 @@ public class TestProgressiveDirtyER {
     public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
 
-        String no = "5m";
+        String no = "3m";
         String queries = "queries2";
 
 
