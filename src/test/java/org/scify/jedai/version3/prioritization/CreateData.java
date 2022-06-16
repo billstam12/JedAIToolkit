@@ -35,9 +35,9 @@ public class CreateData {
 
     public static void main(String[] args) throws IOException {
         String path = "";
-        String file = "papers5m";
+        String file = "people500k";
 
-            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/oag/" + file + ".csv";
+            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/synthetic_prog/" + file + ".csv";
 //            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/synthetic/" + file + ".csv";
 
             List<EntityProfile> entityProfiles = new ArrayList<>();
@@ -62,7 +62,7 @@ public class CreateData {
             entitySerializationReader.storeSerializedObject(entityProfiles,
                     "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/" + file);
 
-            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/ground_truth_oag/ground_truth_" + file + ".csv";
+            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/synthetic_prog/ground_truth_" + file + ".csv";
             try (BufferedReader br = new BufferedReader(new FileReader(path))) {
                 String line;
                 Set<IdDuplicates> groundDups = new HashSet<>();
@@ -78,7 +78,7 @@ public class CreateData {
                 entitySerializationReader = new EntitySerializationReader( "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/groundTruth" + file + "Duplicates");
 
                 entitySerializationReader.storeSerializedObject(groundDups,
-                        "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/groundTruth" + file + "Duplicates");
+                        "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/progressive-data/" + file + "Duplicates");
             }
     }
 }
