@@ -51,7 +51,7 @@ public class TestDirtyForQueryER {
 //        RepresentationModel[] bestModels = {RepresentationModel.CHARACTER_BIGRAM_GRAPHS, RepresentationModel.CHARACTER_BIGRAMS_TF_IDF};
 //        SimilarityMetric[] bestMetrics = {SimilarityMetric.GRAPH_OVERALL_SIMILARITY, SimilarityMetric.GENERALIZED_JACCARD_SIMILARITY};
 
-        String mainDir = "data/dirtyErDatasets/";
+        String mainDir = "data/queryERDatasets/";
 //        String[] profilesFile = {"cddbProfiles", "coraProfiles"};
         String[] profilesFile = {"papers200k"};
 //        String[] groundtruthFile = {"cddbIdDuplicates", "coraIdDuplicates"};
