@@ -76,29 +76,24 @@ public class TestDirtyForQueryER {
             double bpEnd = System.currentTimeMillis();
 
             double bfStart = System.currentTimeMillis();
-            IBlockProcessing blockCleaningMethod2 = new BlockFiltering();
+            IBlockProcessing blockCleaningMethod2 = new BlockFiltering(0.5F);
             blocks = blockCleaningMethod2.refineBlocks(blocks);
             double bfEnd = System.currentTimeMillis();
 
             double epStart = System.currentTimeMillis();
             IBlockProcessing comparisonCleaningMethod = new CardinalityEdgePruning(WeightingScheme.ARCS);
-            List<AbstractBlock> cnpBlocks = comparisonCleaningMethod.refineBlocks(blocks);
+            //List<AbstractBlock> cnpBlocks = comparisonCleaningMethod.refineBlocks(blocks);
             double epEnd = System.currentTimeMillis();
 
             float totalComparisons = 0;
-//            for (AbstractBlock block :cnpBlocks) {
-//                totalComparisons += block.getNoOfComparisons();
-//            }
-
-
-            for (AbstractBlock block :blocks) {
+            for (AbstractBlock block : blocks) {
                 totalComparisons += block.getNoOfComparisons();
             }
+
 
 //            final IPrioritization prioritization = new ProgressiveGlobalTopComparisons((int) totalComparisons, WeightingScheme.JS);
 //            PPS method
             final IPrioritization prioritization = new ProgressiveEntityScheduling((int) totalComparisons, WeightingScheme.ARCS);
-//            prioritization.developBlockBasedSchedule(cnpBlocks);
             prioritization.developBlockBasedSchedule(blocks);
 
 
@@ -113,12 +108,8 @@ public class TestDirtyForQueryER {
                 c1.setUtilityMeasure(similarity);
 
                 duplicatePropagation.isSuperfluous(c1.getEntityId1(), c1.getEntityId2());
-//                System.out.println("Recall\t:\t" + (double)duplicatePropagation.getNoOfDuplicates()/duplicatePropagation.getExistingDuplicates());
                 counter++;
-//                if(counter > 200) break;
-                if (counter == 200 || counter == 5000 || counter == 10000 || counter == 100000)
-                    System.out.println("Recall\t:\t" + (double) duplicatePropagation.getNoOfDuplicates() / duplicatePropagation.getExistingDuplicates());
-
+//
             }
             double resEnd = System.currentTimeMillis();
 
