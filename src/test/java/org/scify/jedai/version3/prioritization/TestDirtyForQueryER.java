@@ -15,7 +15,13 @@
  */
 package org.scify.jedai.version3.prioritization;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.opencsv.CSVWriter;
 import org.apache.log4j.BasicConfigurator;
 import org.scify.jedai.blockbuilding.IBlockBuilding;
 import org.scify.jedai.blockbuilding.StandardBlocking;
@@ -44,7 +50,7 @@ import org.scify.jedai.utilities.enumerations.SimilarityMetric;
 import org.scify.jedai.utilities.enumerations.WeightingScheme;
 
 public class TestDirtyForQueryER {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
 
         float[] bestThresholds = {0.75f, 0.45f};
@@ -53,7 +59,7 @@ public class TestDirtyForQueryER {
 
         String mainDir = "data/queryERDatasets/";
 //        String[] profilesFile = {"cddbProfiles", "coraProfiles"};
-        String[] profilesFile = {"papers1m"};
+        String[] profilesFile = {"papers200k"};
 //        String[] groundtruthFile = {"cddbIdDuplicates", "coraIdDuplicates"};
         String[] groundtruthFile = {profilesFile[0] + "Duplicates"};
 
@@ -89,8 +95,11 @@ public class TestDirtyForQueryER {
             for (AbstractBlock block : blocks) {
                 totalComparisons += block.getNoOfComparisons();
             }
+            File queriesFile = new File( "results.csv");
 
-
+            FileWriter outputfile = new FileWriter(queriesFile);
+            CSVWriter writer = new CSVWriter(outputfile);
+            writer.writeNext(new String[]{"time", "recall"});
 //            final IPrioritization prioritization = new ProgressiveGlobalTopComparisons((int) totalComparisons, WeightingScheme.JS);
 //            PPS method
             final IPrioritization prioritization = new ProgressiveEntityScheduling((int) totalComparisons, WeightingScheme.ARCS);
@@ -101,6 +110,8 @@ public class TestDirtyForQueryER {
 
             final IEntityMatching em = new ProfileMatcher(profiles, RepresentationModel.TOKEN_UNIGRAMS, SimilarityMetric.JACCARD_SIMILARITY);//bestModels[i], bestMetrics[i]);
             int counter = 0;
+            double timeThreshold = 5;
+            double t = timeThreshold;
             while (prioritization.hasNext()) {
                 Comparison c1 = prioritization.next();
                 float similarity = em.executeComparison(c1);
@@ -109,6 +120,14 @@ public class TestDirtyForQueryER {
 
                 duplicatePropagation.isSuperfluous(c1.getEntityId1(), c1.getEntityId2());
                 counter++;
+                Double recall = (double)duplicatePropagation.getNoOfDuplicates()/duplicatePropagation.getExistingDuplicates();
+                Double currentTime = (System.currentTimeMillis() - resStart) /1000;
+                if(currentTime > t) {
+                    //System.out.println("Total Recall\t:\t" + recall);
+
+                    t += timeThreshold;
+                    writer.writeNext(new String[]{currentTime.toString(), recall.toString()});
+                }
 //
             }
             double resEnd = System.currentTimeMillis();
@@ -125,6 +144,7 @@ public class TestDirtyForQueryER {
 //                tcomps += b.getNoOfComparisons();
 //            }
 //            System.err.println(tcomps);
+            writer.flush();
             System.err.println("Comps: "+counter);
         }
     }
