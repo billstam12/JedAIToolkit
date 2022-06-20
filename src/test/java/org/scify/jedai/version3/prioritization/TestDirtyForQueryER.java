@@ -55,7 +55,7 @@ public class TestDirtyForQueryER {
 //        String[] profilesFile = {"cddbProfiles", "coraProfiles"};
         String[] profilesFile = {"papers500k"};
 //        String[] groundtruthFile = {"cddbIdDuplicates", "coraIdDuplicates"};
-        String[] groundtruthFile = {"papers200kDuplicates"};
+        String[] groundtruthFile = {profilesFile[0] + "Duplicates"};
 
         for (int i = 0; i < groundtruthFile.length; i++) {
             IEntityReader eReader = new EntitySerializationReader(mainDir + profilesFile[i]);
