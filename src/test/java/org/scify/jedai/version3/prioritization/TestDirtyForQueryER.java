@@ -59,7 +59,7 @@ public class TestDirtyForQueryER {
 
         String mainDir = "data/queryERDatasets/";
 //        String[] profilesFile = {"cddbProfiles", "coraProfiles"};
-        String[] profilesFile = {"papers500k"};
+        String[] profilesFile = {"papers1m"};
 //        String[] groundtruthFile = {"cddbIdDuplicates", "coraIdDuplicates"};
         String[] groundtruthFile = {profilesFile[0] + "Duplicates"};
 
