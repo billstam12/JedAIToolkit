@@ -35,7 +35,7 @@ public class CreateData {
 
     public static void main(String[] args) throws IOException {
         String path = "";
-        String file = "people500k";
+        String file = "people2m";
 
             path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/synthetic_prog/" + file + ".csv";
 //            path = "/Users/vasilisstamatopoulos/Documents/Works/ATHENA/Projects/VF/queryER-data/synthetic/" + file + ".csv";
@@ -52,6 +52,7 @@ public class CreateData {
                     if (index != key) {
                         eP.addAttribute(header[index], nextLine[index]);
                     }
+
                     index++;
                 }
                 entityProfiles.add(eP);
